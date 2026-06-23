@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Plant Watering Tracker — Never Forget Your Leafy Friends</title>
+<meta name="description" content="Track your houseplants watering schedule. Get status alerts and never lose a plant again."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+<div class="blob b1" aria-hidden="true"></div>
+<div class="blob b2" aria-hidden="true"></div>
+
+<header class="hdr">
+<div class="con">
+<div class="hdr-in">
+  <div class="hdr-brand">
+    <span class="ms hdr-ico" aria-hidden="true">eco</span>
+    <h1 class="hdr-title">Plant Watering Tracker</h1>
+  </div>
+  <div class="hdr-r">
+    <span id="badge" class="badge" aria-live="polite"></span>
+    <button id="uab" class="av-btn" aria-label="Change profile avatar" title="Change avatar">
+      <span id="uad">🌿</span>
+      <span class="av-pip" aria-hidden="true"><span class="ms">edit</span></span>
+    </button>
+  </div>
+</div>
+</div>
+</header>
+
+<main>
+<div class="con">
+<p class="tblg sub">Never forget your leafy friends again. 🌿</p>
+
+<section aria-labelledby="fh">
+<div class="fc">
+  <h2 id="fh" class="thmd fc-h"><span class="ms" aria-hidden="true">add_circle</span>Add New Plant</h2>
+  <form id="form" novalidate>
+    <div class="ff full" style="margin-bottom:var(--md)">
+      <label class="tllg fl" for="fap">Plant Avatar</label>
+      <div class="av-sel">
+        <button type="button" id="fab" class="av-pre" aria-label="Choose avatar" title="Pick emoji">
+          <span class="ms">potted_plant</span>
+        </button>
+        <div class="av-info">
+          <h4>Customize your plant's look</h4>
+          <p>Pick an emoji for your plant</p>
+          <button type="button" class="bav" id="fab2">
+            <span class="ms" aria-hidden="true">edit</span>Choose Avatar
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="fgrid">
+      <div class="ff">
+        <label class="tllg fl" for="pn">Plant Name</label>
+        <input class="fi" id="pn" type="text" placeholder="e.g. Monstera Deliciosa" autocomplete="off" required/>
+      </div>
+      <div class="ff">
+        <label class="tllg fl" for="pnk">Nickname <span>(optional)</span></label>
+        <input class="fi" id="pnk" type="text" placeholder='e.g. Big Leaf' autocomplete="off"/>
+      </div>
+      <div class="ff">
+        <label class="tllg fl" for="pi">Watering Every (days)</label>
+        <div class="fiw">
+          <input class="fi fi-ico" id="pi" type="number" min="1" max="365" placeholder="7" required/>
+          <span class="ms fi-icon" aria-hidden="true">calendar_month</span>
+        </div>
+      </div>
+      <div class="ff">
+        <label class="tllg fl" for="plw">Last Watered Date</label>
+        <input class="fi" id="plw" type="date"/>
+      </div>
+    </div>
+    <div class="fact">
+      <button class="btn bp" type="submit">
+        <span class="ms" aria-hidden="true">potted_plant</span>Add Plant
+      </button>
+    </div>
+  </form>
+</div>
+</section>
+
+<section aria-labelledby="lh">
+<div class="sh">
+  <h2 id="lh" class="thlg">Your Plants</h2>
+</div>
+<div id="pg" class="pgrid" role="list" aria-label="Your plant collection"></div>
+<div id="es" class="es" role="status">
+  <span class="ms es-ico" aria-hidden="true">potted_plant</span>
+  <h3 class="thmd es-t">No plants yet</h3>
+  <p class="tbmd es-s">Add your first plant above to start tracking!</p>
+</div>
+</section>
+
+</div>
+</main>
+
+<footer><p>Made with 💚 for plant lovers &mdash; data stored locally in your browser</p></footer>
+
+<div id="am" class="mbk" role="dialog" aria-modal="true" aria-labelledby="at">
+<div class="mbox">
+  <div class="mhdr">
+    <h3 id="at">Choose Avatar</h3>
+    <button id="ac" class="mcls" aria-label="Close"><span class="ms">close</span></button>
+  </div>
+  <p class="esl">Pick an Emoji</p>
+  <div id="ag" class="egrid" role="group" aria-label="Emoji options"></div>
+</div>
+</div>
+
+<div id="dm" class="mbk" role="dialog" aria-modal="true" aria-labelledby="dt">
+<div class="mbox">
+  <div class="mico"><span class="ms" aria-hidden="true">delete</span></div>
+  <p class="mtitle" id="dt">Remove Plant?</p>
+  <p class="msub" id="dsub"></p>
+  <div class="mact">
+    <button class="bcancel" id="dcan">Cancel</button>
+    <button class="bconfirm" id="dcon"><span class="ms" aria-hidden="true">delete</span>Remove</button>
+  </div>
+</div>
+</div>
+
+<div id="tc" aria-live="polite" aria-atomic="true"></div>
+<script src="js/app.js"></script>
+</body>
+</html>
