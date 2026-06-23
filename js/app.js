@@ -16,10 +16,14 @@ function daysUntil(lw,iv){
   const n=new Date(a);n.setDate(n.getDate()+iv);
   return Math.ceil((n-b)/86400000);
 }
-const status=d=>d<0?'ov':d===0?'due':'ok';
-const label=s=>({ov:'Overdue',due:'Due Today',ok:'OK'})[s];
-const aria=s=>({ov:'overdue',due:'due-today',ok:'ok'})[s];
-const cdText=(d,s)=>s==='ov'?`${Math.abs(d)} day${Math.abs(d)!==1?'s':''} overdue`:s==='due'?'Due today!':`Water in ${d} day${d!==1?'s':''}`;
+const status=d=>d<0?'ov':d===0?'due':d<=2?'soon':'ok';
+const label=s=>({ov:'Overdue',due:'Due Today',soon:'Due Soon',ok:'OK'})[s];
+const cdText=(d,s)=>{
+  if(s==='ov')return`${Math.abs(d)} day${Math.abs(d)!==1?'s':''} overdue`;
+  if(s==='due')return'Due today!';
+  if(s==='soon')return`Due in ${d} day${d!==1?'s':''}!`;
+  return`Water in ${d} day${d!==1?'s':''}`;
+};
 
 const sortPlants=p=>[...p].sort((a,b)=>daysUntil(a.lastWatered,a.interval)-daysUntil(b.lastWatered,b.interval));
 
@@ -51,10 +55,10 @@ function render(){
   if(!plants.length){grid.innerHTML='';document.getElementById('es').classList.add('vis');return;}
   document.getElementById('es').classList.remove('vis');
   grid.innerHTML=sorted.map((p,i)=>{
-    const d=daysUntil(p.lastWatered,p.interval),s=status(d),lb=label(s),ar=aria(s);
-    const cdIcon=s==='ov'?'warning_amber':s==='due'?'water_drop':'schedule';
-    const wIcon=s==='ov'?'water_drop':'done',wTxt=(s==='ov'||s==='due')?'Water Now':'Mark Watered';
-    const wCls=s==='ov'?'bwov':s==='due'?'bwd':'bwok';
+    const d=daysUntil(p.lastWatered,p.interval),s=status(d),lb=label(s);
+    const cdIcon=s==='ov'?'warning_amber':(s==='due'||s==='soon')?'water_drop':'schedule';
+    const wIcon=s==='ov'?'water_drop':'done',wTxt=(s==='ov'||s==='due')?'Water Now':(s==='soon'?'Water Soon':'Mark Watered');
+    const wCls=s==='ov'?'bwov':(s==='due'||s==='soon')?'bwd':'bwok';
     const nick=p.nickname?`<p class="tbmd cnk">"${esc(p.nickname)}"</p>`:'';
     return`<article class="pc pc--${s}" role="listitem" aria-label="${esc(p.name)} — ${lb}" style="animation-delay:${i*.05}s">
 <div class="ca"></div>
@@ -148,15 +152,22 @@ document.addEventListener('keydown',e=>{
 });
 
 const form=document.getElementById('form'),iName=document.getElementById('pn'),iNick=document.getElementById('pnk'),iInt=document.getElementById('pi'),iLw=document.getElementById('plw');
-const fAvPre=document.getElementById('fab'); // visible preview circle button
+const fAvBtn =document.getElementById('fab');   // button — click trigger
+const fAvDisp=document.getElementById('fapre'); // inner span — display update
 const fAvBtn2=document.getElementById('fab2');
 let _fav=null;
 iLw.value=todayIso();
 function updateFavPre(){
-  fAvPre.innerHTML=(_fav&&_fav.t==='emoji')?`<span class="ae">${_fav.v}</span>`:'<span class="ms">potted_plant</span>';
+  if(_fav&&_fav.t==='emoji'){
+    fAvDisp.className='ae';
+    fAvDisp.textContent=_fav.v;
+  } else {
+    fAvDisp.className='ms';
+    fAvDisp.textContent='potted_plant';
+  }
 }
 function openFav(){openAv(_fav,av=>{_fav=av;updateFavPre();});}
-fAvPre.addEventListener('click',openFav);
+fAvBtn.addEventListener('click',openFav);
 fAvBtn2.addEventListener('click',openFav);
 form.addEventListener('submit',e=>{
   e.preventDefault();
@@ -165,7 +176,10 @@ form.addEventListener('submit',e=>{
   if(!iv||iv<1){toast('Enter a valid interval (≥1).','i');return iInt.focus();}
   const p=load();p.push({id:genId(),name,nickname:nick,interval:iv,lastWatered:lw,avatar:_fav});
   save(p);render();toast(`🌿 ${name} added!`);
-  iName.value=iNick.value=iInt.value='';iLw.value=todayIso();_fav=null;updateFavPre();iName.focus();
+  iName.value=iNick.value=iInt.value='';iLw.value=todayIso();
+  _fav=null;
+  fAvDisp.className='ms';fAvDisp.textContent='potted_plant';
+  iName.focus();
 });
 
 renderUserAv();render();
